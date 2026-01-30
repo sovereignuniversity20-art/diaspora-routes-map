@@ -3,9 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Diaspora Routes — Living Map</title>
+  <title>Route 0 — Test Map</title>
 
-  <!-- Mapbox GL JS -->
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 
@@ -14,34 +13,10 @@
 <body>
   <div id="map"></div>
 
-  <!-- Minimal UI overlay -->
-  <div class="ui">
-    <div class="title">
-      <div class="kicker">Diaspora Routes</div>
-      <div class="headline">The Living Map</div>
-      <div class="sub">Tap/click near any route fragment to reveal its “memory echo.”</div>
-    </div>
-
-    <div class="progress" aria-label="Progress">
-      <div class="node" id="node-R1" title="Route I"></div>
-      <div class="node" id="node-R2" title="Route II"></div>
-      <div class="node" id="node-R3" title="Route III"></div>
-      <div class="node" id="node-R4" title="Route IV"></div>
-    </div>
-
-    <div class="toggles">
-      <button class="btn" id="toggle-constraint">Constraint</button>
-      <button class="btn" id="toggle-concealment">Concealment</button>
-      <button class="btn ghost" id="reset">Reset</button>
-    </div>
-
-    <div class="synthesis hidden" id="synthesis">
-      <div class="synthesis-title">Synthesis</div>
-      <div class="synthesis-text">
-        Two routes can share the same purpose even when they cross different geographies.
-        Which two feel most similar — and why?
-      </div>
-    </div>
+  <div class="hud">
+    <div class="title">Route 0 — Test</div>
+    <div class="status" id="status">Collected: 0/4</div>
+    <button id="reset">Reset</button>
   </div>
 
   <script src="app.js"></script>
