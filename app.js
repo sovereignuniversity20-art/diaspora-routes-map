@@ -90,12 +90,25 @@ function getNearestRouteFeature(point) {
     [point.x - r, point.y - r],
     [point.x + r, point.y + r]
   ];
-  // Query rendered features from the clickable hit layer
+
   const features = map.queryRenderedFeatures(box, { layers: ["routes-hit"] });
   if (!features || features.length === 0) return null;
 
-  // If multiple overlap, pick the first (good enough for 4 routes)
+  // 1) Prefer a route that has NOT been collected yet
+  for (const feature of features) {
+    const routeId = String(feature?.properties?.route_id || "")
+      .trim()
+      .toUpperCase();
+
+    if (routeId && !inspected.has(routeId)) {
+      return feature;
+    }
+  }
+
+  // 2) If all nearby routes are already collected, fall back to the first
   return features[0];
+}
+
 }
 
 map.on("load", async () => {
