@@ -1,0 +1,64 @@
+html, body { margin: 0; padding: 0; height: 100%; background: #050814; }
+#map { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
+
+.ui {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  pointer-events: none;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: rgba(255,255,255,0.92);
+}
+
+.title { max-width: 560px; margin-bottom: 12px; }
+.kicker { letter-spacing: 0.18em; text-transform: uppercase; font-size: 11px; opacity: 0.75; }
+.headline { font-size: 22px; font-weight: 700; margin-top: 4px; }
+.sub { font-size: 13px; opacity: 0.85; margin-top: 6px; }
+
+.progress {
+  display: flex;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.node {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.55);
+  background: rgba(255,255,255,0.08);
+}
+
+.node.filled {
+  border-color: rgba(255,200,80,0.95);
+  background: rgba(255,200,80,0.85);
+  box-shadow: 0 0 18px rgba(255,200,80,0.55);
+}
+
+.toggles { display: flex; gap: 8px; pointer-events: auto; }
+.btn {
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.22);
+  color: rgba(255,255,255,0.92);
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.btn:hover { background: rgba(255,255,255,0.16); }
+.btn.ghost { opacity: 0.8; }
+
+.synthesis {
+  margin-top: 12px;
+  max-width: 560px;
+  padding: 12px 12px;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.28);
+  border: 1px solid rgba(255,200,80,0.25);
+  pointer-events: auto;
+}
+.synthesis-title { font-weight: 700; margin-bottom: 6px; }
+.synthesis-text { font-size: 13px; opacity: 0.9; line-height: 1.35; }
+
+.hidden { display: none; }
