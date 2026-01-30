@@ -1,5 +1,5 @@
 // 1) Paste your Mapbox token here:
-mapboxgl.accessToken = "PASTE_YOUR_MAPBOX_TOKEN_HERE";
+mapboxgl.accessToken = "pk.eyJ1Ijoic2hhcnJlbGwyNiIsImEiOiJjbWszZXU2NXAwczBtM2ZvZWEwdzJwNnp0In0.96o-A9UJXMVnihqx-M4jYA";
 
 // 2) Map init
 const map = new mapboxgl.Map({
