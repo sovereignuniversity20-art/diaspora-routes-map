@@ -1,6 +1,11 @@
 // 1) Paste your Mapbox token here:
 mapboxgl.accessToken = "pk.eyJ1Ijoic2hhcnJlbGwyNiIsImEiOiJjbWszZXU2NXAwczBtM2ZvZWEwdzJwNnp0In0.96o-A9UJXMVnihqx-M4jYA ";
 
+
+// ✅ REQUIRED for strict CSP environments
+mapboxgl.workerUrl = "https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl-csp-worker.js";
+
+
 // ---- CONFIG YOU CAN TUNE ----
 const START_CENTER = [-35, 18]; // Atlantic-centered
 const START_ZOOM = 1.8;
