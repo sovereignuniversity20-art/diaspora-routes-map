@@ -1,3 +1,5 @@
+alert("app.js is running");
+
 // 1) Paste your Mapbox token here:
 mapboxgl.accessToken = "pk.eyJ1Ijoic2hhcnJlbGwyNiIsImEiOiJjbWszZXU2NXAwczBtM2ZvZWEwdzJwNnp0In0.96o-A9UJXMVnihqx-M4jYA";
 
