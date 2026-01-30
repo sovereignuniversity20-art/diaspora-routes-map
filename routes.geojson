@@ -12,9 +12,9 @@
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [-15.0, 12.0],
-          [-45.0, 10.0],
-          [-70.0, 18.0]
+          [-15, 12],
+          [-30, 10],
+          [-45, 12]
         ]
       }
     },
@@ -23,16 +23,15 @@
       "properties": {
         "route_id": "R2",
         "label": "Route II",
-        "logic": "CONSTRAINT",
-        "echo": "Movement toward possibility. Carrying more than belongings."
+        "logic": "CONCEALMENT",
+        "echo": "Paths hidden in plain sight. Survival through silence."
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [-80.0, 30.0],
-          [-87.0, 35.0],
-          [-90.0, 41.0],
-          [-74.0, 40.7]
+          [-10, -5],
+          [-30, -8],
+          [-50, -6]
         ]
       }
     },
@@ -41,15 +40,15 @@
       "properties": {
         "route_id": "R3",
         "label": "Route III",
-        "logic": "CONCEALMENT",
-        "echo": "Movement through what others overlook. Safety through knowledge."
+        "logic": "CONSTRAINT",
+        "echo": "Borders enforced by law and violence."
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [-83.5, 26.0],
-          [-81.5, 29.0],
-          [-79.5, 32.0]
+          [-80, 25],
+          [-90, 30],
+          [-100, 35]
         ]
       }
     },
@@ -59,15 +58,14 @@
         "route_id": "R4",
         "label": "Route IV",
         "logic": "CONCEALMENT",
-        "echo": "Movement without bodies. Signals that travel anyway."
+        "echo": "Culture becomes the map when geography fails."
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [1.0, 6.0],
-          [-61.0, 13.0],
-          [-73.9, 40.7],
-          [-0.1, 51.5]
+          [-95, 15],
+          [-85, 10],
+          [-75, 12]
         ]
       }
     }
