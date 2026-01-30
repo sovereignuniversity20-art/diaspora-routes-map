@@ -4,12 +4,13 @@
     {
       "type": "Feature",
       "properties": {
-       "route_id": "R1",
+       {
+  "route_id": "R1",
   "label": "Route I — Indian Ocean → Atlantic Labor Circuits",
   "logic": "CONSTRAINT",
-  "echo": "This route traces the movement of South Asian people into Atlantic worlds through empire, 
-           maritime labor, coercion, and post-abolition indenture. While distinct from African chattel slavery, 
-           these labor systems were designed to replace it—binding Indian bodies to the same plantations, ports, and profits built by the transatlantic slave trade."
+  "echo": "This route traces the movement of South Asian people into Atlantic worlds through empire, maritime labor, coercion, and post-abolition indenture. While distinct from African chattel slavery, these labor systems were designed to replace it—binding Indian bodies to the same plantations, ports, and profits built by the transatlantic slave trade."
+}
+
       },
       "geometry": {
         "type": "LineString",
