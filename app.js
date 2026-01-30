@@ -1,4 +1,4 @@
-mapboxgl.accessToken = "PASTE_YOUR_MAPBOX_TOKEN_HERE";
+mapboxgl.accessToken = "pk.eyJ1Ijoic2hhcnJlbGwyNiIsImEiOiJjbWszZXU2NXAwczBtM2ZvZWEwdzJwNnp0In0.96o-A9UJXMVnihqx-M4jYA";
 
 /**
  * Flat, interactive map + reliable nearest-route picking.
