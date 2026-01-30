@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Diaspora Routes — Living Map</title>
 
-  <!-- Mapbox GL JS -->
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 
@@ -14,7 +13,6 @@
 <body>
   <div id="map"></div>
 
-  <!-- Minimal UI overlay -->
   <div class="ui">
     <div class="title">
       <div class="kicker">Diaspora Routes</div>
@@ -41,6 +39,18 @@
         Two routes can share the same purpose even when they cross different geographies.
         Which two feel most similar — and why?
       </div>
+    </div>
+
+    <!-- ✅ NEW: Collect stamp -->
+    <div class="stamp hidden" id="stamp" aria-live="polite">
+      COLLECTED
+    </div>
+
+    <!-- ✅ NEW: Unlock code panel -->
+    <div class="unlock hidden" id="unlock">
+      <div class="unlock-kicker">Unlock Code</div>
+      <div class="unlock-code" id="unlockCode">ROUTES</div>
+      <div class="unlock-sub">Enter this code in the next section to continue.</div>
     </div>
   </div>
 
