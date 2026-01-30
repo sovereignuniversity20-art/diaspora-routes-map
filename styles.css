@@ -62,3 +62,43 @@
   opacity: 0.85;
   line-height: 1.35;
 }
+.stamp {
+  position: absolute;
+  top: 92px;
+  right: 16px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,200,80,0.55);
+  background: rgba(0,0,0,0.28);
+  color: rgba(255,220,140,0.95);
+  letter-spacing: 0.12em;
+  font-size: 11px;
+  font-weight: 800;
+  opacity: 0;
+}
+
+.stamp.show {
+  animation: stampPop 520ms ease-out forwards;
+}
+
+@keyframes stampPop {
+  0%   { opacity: 0; transform: scale(0.9); }
+  35%  { opacity: 1; transform: scale(1.06); }
+  100% { opacity: 0; transform: scale(0.96); }
+}
+
+.unlock {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(0,0,0,0.36);
+  border: 1px solid rgba(255,200,80,0.30);
+}
+
+.unlock-code {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+}
