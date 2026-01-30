@@ -4,17 +4,26 @@
     {
       "type": "Feature",
       "properties": {
-        "route_id": "R1",
-        "label": "Route I",
-        "logic": "CONSTRAINT",
-        "echo": "Movement under watch. Direction chosen elsewhere."
+       "route_id": "R1",
+  "label": "Route I — Indian Ocean → Atlantic Labor Circuits",
+  "logic": "CONSTRAINT",
+  "echo": "This route traces the movement of South Asian people into Atlantic worlds through empire, 
+           maritime labor, coercion, and post-abolition indenture. While distinct from African chattel slavery, 
+           these labor systems were designed to replace it—binding Indian bodies to the same plantations, ports, and profits built by the transatlantic slave trade."
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-           [-15.0, 12.0],
-          [-45.0, 10.0],
-          [-70.0, 18.0]
+          [76.2673, 9.9312],
+          [80.7000, 6.5000],
+          [60.0000, 10.0000],
+          [45.0000, 12.0000],
+          [20.0000, 5.0000],
+          [-10.0000, 6.0000],
+          [-35.0000, 14.0000],
+          [-55.0000, 22.0000],
+          [-71.0000, 28.0000],
+          [-76.3000, 36.8500]
         ]
       }
     },
@@ -22,17 +31,19 @@
       "type": "Feature",
       "properties": {
         "route_id": "R2",
-        "label": "Route II",
-        "logic": "CONCEALMENT",
-        "echo": "Paths hidden in plain sight. Survival through silence."
+        "label": "Route II — West Africa → Caribbean",
+        "logic": "CONSTRAINT",
+        "echo": "Extraction routes: wealth for empires, catastrophe for communities—memory carried across saltwater."
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [-80.0, 30.0],
-          [-87.0, 35.0],
-          [-90.0, 41.0],
-          [-74.0, 40.7]
+          [-1.3500, 5.0830],
+          [-10.0000, 6.0000],
+          [-22.0000, 9.0000],
+          [-35.0000, 12.0000],
+          [-48.0000, 13.0000],
+          [-59.6000, 13.1000]
         ]
       }
     },
@@ -40,16 +51,19 @@
       "type": "Feature",
       "properties": {
         "route_id": "R3",
-        "label": "Route III",
-        "logic": "CONSTRAINT",
-        "echo": "Borders enforced by law and violence."
+        "label": "Route III — Mississippi → Chicago",
+        "logic": "CONCEALMENT",
+        "echo": "The Great Migration: leaving the plantation economy, building northern cities, remaking culture and politics."
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [-83.5, 26.0],
-          [-81.5, 29.0],
-          [-79.5, 32.0]
+          [-90.1848, 32.2988],
+          [-90.0715, 29.9511],
+          [-90.04898, 35.1495],
+          [-90.1994, 38.6270],
+          [-89.6501, 39.7817],
+          [-87.6298, 41.8781]
         ]
       }
     },
@@ -57,17 +71,19 @@
       "type": "Feature",
       "properties": {
         "route_id": "R4",
-        "label": "Route IV",
+        "label": "Route IV — Maroon Corridor (Swamps & Bayous)",
         "logic": "CONCEALMENT",
-        "echo": "Culture becomes the map when geography fails."
+        "echo": "Refusal routes: maroon survival in wetlands—kinship, camouflage, and self-determination."
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-           [1.0, 6.0],
-          [-61.0, 13.0],
-          [-73.9, 40.7],
-          [-0.1, 51.5]
+          [-90.0715, 29.9511],
+          [-91.5000, 30.2000],
+          [-92.3000, 30.4500],
+          [-93.9000, 30.1000],
+          [-95.3698, 29.7604],
+          [-94.7000, 31.1000]
         ]
       }
     }
