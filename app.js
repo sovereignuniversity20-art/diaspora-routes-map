@@ -1,5 +1,5 @@
 // 1) Paste your Mapbox token here:
-mapboxgl.accessToken = "PASTE_YOUR_MAPBOX_TOKEN_HERE";
+mapboxgl.accessToken = "pk.eyJ1Ijoic2hhcnJlbGwyNiIsImEiOiJjbWszZXU2NXAwczBtM2ZvZWEwdzJwNnp0In0.96o-A9UJXMVnihqx-M4jYA ";
 
 // ---- CONFIG YOU CAN TUNE ----
 const START_CENTER = [-35, 18]; // Atlantic-centered
