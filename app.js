@@ -1,216 +1,72 @@
 // 1) Paste your Mapbox token here:
-mapboxgl.accessToken = "pk.eyJ1Ijoic2hhcnJlbGwyNiIsImEiOiJjbWszZXU2NXAwczBtM2ZvZWEwdzJwNnp0In0.96o-A9UJXMVnihqx-M4jYA ";
-
-
-// ✅ REQUIRED for strict CSP environments
-mapboxgl.workerUrl = "https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl-csp-worker.js";
-
+mapboxgl.accessToken = "pk.eyJ1Ijoic2hhcnJlbGwyNiIsImEiOiJjbWszZXU2NXAwczBtM2ZvZWEwdzJwNnp0In0.96o-A9UJXMVnihqx-M4jYA";
 
 // ---- CONFIG YOU CAN TUNE ----
-const START_CENTER = [-35, 18]; // Atlantic-centered
+const START_CENTER = [-35, 18]; // global-ish Atlantic-centered
 const START_ZOOM = 1.8;
-
-// “Sticky click”: bigger = easier on mobile
-const CLICK_RADIUS_PX = 20;
-
-// Keep players roughly in world view
-const WORLD_BOUNDS = [[-180, -70], [180, 85]]; // [SW], [NE]
-
-// Unlock code shown after all 4 routes are collected
-const UNLOCK_CODE_TEXT = "ROUTES";
+const CLICK_RADIUS_PX = 16;     // bigger = easier clicking (mobile friendly)
 // --------------------------------
 
-// ---- Sound: tiny “collect” chime (no file needed) ----
-let audioCtx = null;
-function playCollectSound(isNew) {
-  try {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const t0 = audioCtx.currentTime;
-
-    const gain = audioCtx.createGain();
-    gain.gain.setValueAtTime(0.0001, t0);
-    gain.gain.exponentialRampToValueAtTime(isNew ? 0.18 : 0.09, t0 + 0.01);
-    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + (isNew ? 0.18 : 0.12));
-
-    const osc = audioCtx.createOscillator();
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(isNew ? 784 : 523, t0); // G5 vs C5
-    osc.connect(gain).connect(audioCtx.destination);
-
-    const osc2 = audioCtx.createOscillator();
-    osc2.type = "triangle";
-    osc2.frequency.setValueAtTime(isNew ? 1046 : 659, t0); // C6 vs E5
-    const gain2 = audioCtx.createGain();
-    gain2.gain.setValueAtTime(0.0001, t0);
-    gain2.gain.exponentialRampToValueAtTime(isNew ? 0.06 : 0.03, t0 + 0.01);
-    gain2.gain.exponentialRampToValueAtTime(0.0001, t0 + (isNew ? 0.12 : 0.09));
-    osc2.connect(gain2).connect(audioCtx.destination);
-
-    osc.start(t0);
-    osc2.start(t0);
-    osc.stop(t0 + (isNew ? 0.20 : 0.14));
-    osc2.stop(t0 + (isNew ? 0.14 : 0.10));
-  } catch (e) {
-    // If audio is blocked, fail silently
-  }
-}
-// ------------------------------------------------------
-
-// ---- UI helpers: Stamp + Unlock Panel ----
-function showStamp() {
-  const stamp = document.getElementById("stamp");
-  if (!stamp) return;
-
-  // Ensure it is visible
-  stamp.classList.remove("hidden");
-
-  // Restart animation reliably
-  stamp.classList.remove("show");
-  void stamp.offsetWidth; // force reflow
-  stamp.classList.add("show");
-
-  // Hide after animation
-  window.clearTimeout(showStamp._t);
-  showStamp._t = window.setTimeout(() => {
-    stamp.classList.add("hidden");
-    stamp.classList.remove("show");
-  }, 560);
-}
-
-function showUnlockCode(codeText = UNLOCK_CODE_TEXT) {
-  const panel = document.getElementById("unlock");
-  const code = document.getElementById("unlockCode");
-  if (code) code.textContent = codeText;
-  if (panel) panel.classList.remove("hidden");
-}
-
-function hideUnlockCode() {
-  const panel = document.getElementById("unlock");
-  if (panel) panel.classList.add("hidden");
-}
-// ------------------------------------------------------
-
-// Map init: flat + explorable
 const map = new mapboxgl.Map({
   container: "map",
   style: "mapbox://styles/mapbox/dark-v11",
   center: START_CENTER,
   zoom: START_ZOOM,
-  projection: "mercator",
+  projection: "mercator",     // ✅ flat projection
   attributionControl: false,
   interactive: true
 });
 
-// Fully explorable controls (map-like, no rotation)
-map.scrollZoom.enable();
-map.dragPan.enable();
-map.boxZoom.enable();
-map.keyboard.enable();
-map.doubleClickZoom.enable();
-map.touchZoomRotate.enable({ rotation: false }); // pinch zoom allowed, rotation off
+// “Static but interactive” = no panning/zooming/rotating, but clicking still works
+map.scrollZoom.disable();
+map.boxZoom.disable();
 map.dragRotate.disable();
+map.dragPan.disable();
+map.keyboard.disable();
+map.doubleClickZoom.disable();
+map.touchZoomRotate.disableRotation();
+// Allow touch drag? (kept off for “static mural” feel). If you want light panning later, we can enable dragPan.
 
-map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "bottom-right");
-
-// Gentle constraints so players don’t get lost
-map.setMaxBounds(WORLD_BOUNDS);
-map.setMinZoom(1.2);
-map.setMaxZoom(4.2);
-
-// State
 const inspected = new Set();
 let showConstraint = true;
 let showConcealment = true;
-let currentHighlightedRouteId = null;
 
-// Progress UI
 function setNodeFilled(routeId) {
   const node = document.getElementById(`node-${routeId}`);
   if (node) node.classList.add("filled");
 }
-
-function clearNodes() {
-  ["R1", "R2", "R3", "R4"].forEach((r) => {
-    const n = document.getElementById(`node-${r}`);
-    if (n) n.classList.remove("filled");
-  });
-}
-
-// Reveal synthesis + unlock code after 4/4
-function updateEndState() {
+function updateSynthesisVisibility() {
   const synth = document.getElementById("synthesis");
-  if (inspected.size >= 4) {
-    if (synth) synth.classList.remove("hidden");
-    showUnlockCode(UNLOCK_CODE_TEXT);
-  }
-}
-
-// Filtering (Constraint / Concealment toggles)
-function getLogicFilter() {
-  if (showConstraint && !showConcealment) {
-    return ["==", ["get", "logic"], "CONSTRAINT"];
-  }
-  if (!showConstraint && showConcealment) {
-    return ["==", ["get", "logic"], "CONCEALMENT"];
-  }
-  if (!showConstraint && !showConcealment) {
-    return ["==", ["get", "logic"], "__NONE__"];
-  }
-  return ["!=", ["get", "logic"], "__NONE__"]; // show all
+  if (inspected.size >= 4) synth.classList.remove("hidden");
 }
 
 function applyFilters() {
-  const logicFilter = getLogicFilter();
-  map.setFilter("routes-glow", logicFilter);
-  map.setFilter("routes-core", logicFilter);
-  map.setFilter("routes-hit", logicFilter);
+  let filter;
+  if (showConstraint && !showConcealment) {
+    filter = ["==", ["get", "logic"], "CONSTRAINT"];
+  } else if (!showConstraint && showConcealment) {
+    filter = ["==", ["get", "logic"], "CONCEALMENT"];
+  } else if (!showConstraint && !showConcealment) {
+    filter = ["==", ["get", "logic"], "__NONE__"];
+  } else {
+    filter = ["!=", ["get", "logic"], "__NONE__"];
+  }
 
-  // Keep highlight aligned with current filter
-  map.setFilter(
-    "route-highlight",
-    ["all", logicFilter, ["==", ["get", "route_id"], currentHighlightedRouteId || "__NONE__"]]
-  );
+  map.setFilter("routes-glow", filter);
+  map.setFilter("routes-core", filter);
+  // routes-hit stays unfiltered to preserve clickability? Usually keep it filtered too:
+  map.setFilter("routes-hit", filter);
 }
 
-// “Fat click” helper: detect routes near pointer/tap
-function getNearestRouteFeature(point) {
-  const r = CLICK_RADIUS_PX;
-  const box = [
-    [point.x - r, point.y - r],
-    [point.x + r, point.y + r]
-  ];
-  const features = map.queryRenderedFeatures(box, { layers: ["routes-hit"] });
-  if (!features || features.length === 0) return null;
-  return features[0];
-}
-
-// Highlight pulse
-function pulseHighlight() {
-  map.setPaintProperty("route-highlight", "line-opacity", 0.98);
-  map.setPaintProperty("route-highlight", "line-width", 8);
-
-  window.clearTimeout(pulseHighlight._t);
-  pulseHighlight._t = window.setTimeout(() => {
-    map.setPaintProperty("route-highlight", "line-opacity", 0.82);
-    map.setPaintProperty("route-highlight", "line-width", 6);
-  }, 140);
-}
-
-// Popup
 function popupForFeature(feature, lngLat) {
   const routeId = feature.properties.route_id;
   const label = feature.properties.label;
   const echo = feature.properties.echo;
   const logic = feature.properties.logic;
 
-  const isNew = !inspected.has(routeId);
   inspected.add(routeId);
   setNodeFilled(routeId);
-  updateEndState();
-
-  // Feedback
-  playCollectSound(isNew);
-  if (isNew) showStamp();
+  updateSynthesisVisibility();
 
   const html = `
     <div style="font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; font-size: 13px; line-height: 1.3;">
@@ -221,22 +77,36 @@ function popupForFeature(feature, lngLat) {
     </div>
   `;
 
-  new mapboxgl.Popup({ closeButton: true, closeOnClick: true, maxWidth: "320px" })
+  new mapboxgl.Popup({ closeButton: true, closeOnClick: true, maxWidth: "300px" })
     .setLngLat(lngLat)
     .setHTML(html)
     .addTo(map);
 }
 
-map.on("load", async () => {
-  map.setFog(null); // keep it clean/flat
+// “Fat click” helper: finds a route near the pointer, not just exactly on the line
+function getNearestRouteFeature(point) {
+  const r = CLICK_RADIUS_PX;
+  const box = [
+    [point.x - r, point.y - r],
+    [point.x + r, point.y + r]
+  ];
+  // Query rendered features from the clickable hit layer
+  const features = map.queryRenderedFeatures(box, { layers: ["routes-hit"] });
+  if (!features || features.length === 0) return null;
 
-  // Load routes geojson
+  // If multiple overlap, pick the first (good enough for 4 routes)
+  return features[0];
+}
+
+map.on("load", async () => {
+  map.setFog(null); // ✅ no globe fog; keep it clean/flat
+
   const res = await fetch("./routes.geojson");
   const data = await res.json();
 
   map.addSource("routes", { type: "geojson", data });
 
-  // Glow base routes
+  // Soft glow (visual)
   map.addLayer({
     id: "routes-glow",
     type: "line",
@@ -250,7 +120,7 @@ map.on("load", async () => {
     }
   });
 
-  // Core base routes
+  // Brighter core
   map.addLayer({
     id: "routes-core",
     type: "line",
@@ -263,22 +133,7 @@ map.on("load", async () => {
     }
   });
 
-  // Highlight route layer (starts hidden)
-  map.addLayer({
-    id: "route-highlight",
-    type: "line",
-    source: "routes",
-    layout: { "line-cap": "round", "line-join": "round" },
-    filter: ["==", ["get", "route_id"], "__NONE__"],
-    paint: {
-      "line-color": "#ffe8b0",
-      "line-width": 6,
-      "line-opacity": 0.82,
-      "line-blur": 0.6
-    }
-  });
-
-  // Big invisible hit target for easy route selection
+  // Big invisible hit target (for easy clicking)
   map.addLayer({
     id: "routes-hit",
     type: "line",
@@ -286,62 +141,45 @@ map.on("load", async () => {
     layout: { "line-cap": "round", "line-join": "round" },
     paint: {
       "line-color": "#ffffff",
-      "line-width": 44,
-      "line-opacity": 0.01
+      "line-width": 26,     // ✅ MUCH bigger click target
+      "line-opacity": 0.01  // invisible but clickable
     }
   });
 
-  // Apply initial filtering
   applyFilters();
 
-  // Cursor hint
+  // Cursor hint when hovering near a route (desktop)
   map.on("mousemove", (e) => {
     const f = getNearestRouteFeature(e.point);
     map.getCanvas().style.cursor = f ? "pointer" : "";
   });
 
-  // Click/tap near any route → highlight + popup + progress + sound
+  // ✅ Click anywhere near a route to trigger popup
   map.on("click", (e) => {
     const feature = getNearestRouteFeature(e.point);
     if (!feature) return;
-
-    const routeId = feature.properties.route_id;
-
-    // Highlight clicked route
-    currentHighlightedRouteId = routeId;
-    map.setFilter("route-highlight", ["==", ["get", "route_id"], routeId]);
-    pulseHighlight();
-
-    // Show hidden info
     popupForFeature(feature, e.lngLat);
   });
 
   // Toggle buttons
-  document.getElementById("toggle-constraint")?.addEventListener("click", () => {
+  document.getElementById("toggle-constraint").addEventListener("click", () => {
     showConstraint = !showConstraint;
     applyFilters();
   });
-
-  document.getElementById("toggle-concealment")?.addEventListener("click", () => {
+  document.getElementById("toggle-concealment").addEventListener("click", () => {
     showConcealment = !showConcealment;
     applyFilters();
   });
 
-  // Reset
-  document.getElementById("reset")?.addEventListener("click", () => {
+  document.getElementById("reset").addEventListener("click", () => {
     inspected.clear();
-    clearNodes();
-
-    document.getElementById("synthesis")?.classList.add("hidden");
-    hideUnlockCode();
-
+    ["R1","R2","R3","R4"].forEach(r => {
+      const n = document.getElementById(`node-${r}`);
+      if (n) n.classList.remove("filled");
+    });
+    document.getElementById("synthesis").classList.add("hidden");
     showConstraint = true;
     showConcealment = true;
-    currentHighlightedRouteId = null;
-
-    map.setFilter("route-highlight", ["==", ["get", "route_id"], "__NONE__"]);
     applyFilters();
-
-    map.easeTo({ center: START_CENTER, zoom: START_ZOOM, duration: 700 });
   });
 });
