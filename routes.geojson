@@ -1,0 +1,75 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "route_id": "R1",
+        "label": "Route I",
+        "logic": "CONSTRAINT",
+        "echo": "Movement under watch. Direction chosen elsewhere."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-15.0, 12.0],
+          [-45.0, 10.0],
+          [-70.0, 18.0]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "route_id": "R2",
+        "label": "Route II",
+        "logic": "CONSTRAINT",
+        "echo": "Movement toward possibility. Carrying more than belongings."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-80.0, 30.0],
+          [-87.0, 35.0],
+          [-90.0, 41.0],
+          [-74.0, 40.7]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "route_id": "R3",
+        "label": "Route III",
+        "logic": "CONCEALMENT",
+        "echo": "Movement through what others overlook. Safety through knowledge."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-83.5, 26.0],
+          [-81.5, 29.0],
+          [-79.5, 32.0]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "route_id": "R4",
+        "label": "Route IV",
+        "logic": "CONCEALMENT",
+        "echo": "Movement without bodies. Signals that travel anyway."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [1.0, 6.0],
+          [-61.0, 13.0],
+          [-73.9, 40.7],
+          [-0.1, 51.5]
+        ]
+      }
+    }
+  ]
+}
